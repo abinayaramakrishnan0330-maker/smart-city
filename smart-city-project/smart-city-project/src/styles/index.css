@@ -1,0 +1,397 @@
+/* ═══════════════════════════════════════════════════════
+   Smart City – Civic Life  ·  Design System
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Sora:wght@400;600;700;800&display=swap');
+
+/* ── Design Tokens ── */
+:root {
+  /* ─ Colors: Light ─ */
+  --bg-primary:    #f0f6fb;
+  --bg-secondary:  #e4eef6;
+  --bg-tertiary:   #d6e4f0;
+  --surface:       rgba(255, 255, 255, 0.65);
+  --surface-hover: rgba(255, 255, 255, 0.85);
+  --surface-inner: rgba(255, 255, 255, 0.35);
+  --border:        rgba(25, 120, 200, 0.15);
+  --border-hover:  rgba(25, 120, 200, 0.30);
+  --text-primary:  #0a2236;
+  --text-secondary:#3d5a73;
+  --text-muted:    #6b8ba3;
+  --shadow-color:  218 40% 50%;
+
+  /* ─ Brand Palette ─ */
+  --primary:       #1d6fe8;
+  --primary-light: #4d9bf5;
+  --primary-dark:  #1557b8;
+  --primary-glow:  rgba(29, 111, 232, 0.25);
+  --accent:        #12b8d0;
+  --accent-light:  #3dd4e8;
+  --accent-glow:   rgba(18, 184, 208, 0.20);
+  --success:       #2fbf71;
+  --success-light: #4dd98a;
+  --success-glow:  rgba(47, 191, 113, 0.20);
+  --warning:       #f5a524;
+  --warning-light: #fbb948;
+  --warning-glow:  rgba(245, 165, 36, 0.20);
+  --danger:        #e5484d;
+  --danger-light:  #f06b6e;
+  --danger-glow:   rgba(229, 72, 77, 0.25);
+  --info:          #3b82f6;
+
+  /* ─ Gradients ─ */
+  --grad-primary:  linear-gradient(135deg, var(--primary), var(--accent));
+  --grad-success:  linear-gradient(135deg, var(--success), #12b8d0);
+  --grad-hero:     linear-gradient(180deg, #071c33 0%, #0d3a63 60%, #0f5a7a 100%);
+  --grad-mesh:     radial-gradient(ellipse 900px 400px at 80% 0%, rgba(18,184,208,0.25), transparent);
+
+  /* ─ Typography ─ */
+  --font-display:  'Sora', system-ui, -apple-system, sans-serif;
+  --font-body:     'Inter', system-ui, -apple-system, sans-serif;
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.85rem;
+  --fs-base: 1rem;
+  --fs-md:   1.1rem;
+  --fs-lg:   clamp(1.4rem, 3vw, 1.8rem);
+  --fs-xl:   clamp(1.6rem, 4vw, 2.4rem);
+  --fs-2xl:  clamp(2.2rem, 6vw, 3.6rem);
+  --fs-3xl:  clamp(2.8rem, 7vw, 4.2rem);
+
+  /* ─ Spacing ─ */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 72px;
+
+  /* ─ Radius ─ */
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   18px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* ─ Shadows ─ */
+  --shadow-sm:  0 2px 8px hsl(var(--shadow-color) / 0.08);
+  --shadow-md:  0 8px 24px hsl(var(--shadow-color) / 0.10);
+  --shadow-lg:  0 14px 40px hsl(var(--shadow-color) / 0.14);
+  --shadow-xl:  0 20px 60px hsl(var(--shadow-color) / 0.18);
+  --shadow-glow:0 0 30px var(--primary-glow);
+
+  /* ─ Z-index ─ */
+  --z-base:     1;
+  --z-dropdown: 10;
+  --z-sticky:   50;
+  --z-modal:    100;
+  --z-toast:    200;
+  --z-sos:      60;
+
+  /* ─ Transitions ─ */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast:    150ms;
+  --dur-normal:  250ms;
+  --dur-slow:    400ms;
+
+  /* ─ Layout ─ */
+  --nav-height:  68px;
+  --max-width:   1200px;
+  --content-pad: 20px;
+
+  /* ─ Safe Areas (for mobile) ─ */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* ── Dark Theme ── */
+:root[data-theme="dark"],
+:root:not([data-theme="light"]) {
+  /* Auto dark if system prefers */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg-primary:    #060e1a;
+    --bg-secondary:  #0b1a2e;
+    --bg-tertiary:   #112640;
+    --surface:       rgba(16, 32, 56, 0.55);
+    --surface-hover: rgba(24, 48, 80, 0.70);
+    --surface-inner: rgba(20, 40, 68, 0.40);
+    --border:        rgba(80, 190, 230, 0.15);
+    --border-hover:  rgba(80, 190, 230, 0.30);
+    --text-primary:  #e8f4fb;
+    --text-secondary:#b0cfe0;
+    --text-muted:    #7a9bb5;
+    --shadow-color:  210 80% 10%;
+    --primary:       #4d9bf5;
+    --primary-light: #6db3ff;
+    --primary-dark:  #3a7fd6;
+    --accent:        #1ecfe8;
+    --accent-light:  #45e0f5;
+    --success:       #3dd685;
+    --success-light: #5be89c;
+    --warning:       #fbb948;
+    --warning-light: #fcc96e;
+    --danger:        #f06b6e;
+    --danger-light:  #f58e90;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg-primary:    #060e1a;
+  --bg-secondary:  #0b1a2e;
+  --bg-tertiary:   #112640;
+  --surface:       rgba(16, 32, 56, 0.55);
+  --surface-hover: rgba(24, 48, 80, 0.70);
+  --surface-inner: rgba(20, 40, 68, 0.40);
+  --border:        rgba(80, 190, 230, 0.15);
+  --border-hover:  rgba(80, 190, 230, 0.30);
+  --text-primary:  #e8f4fb;
+  --text-secondary:#b0cfe0;
+  --text-muted:    #7a9bb5;
+  --shadow-color:  210 80% 10%;
+  --primary:       #4d9bf5;
+  --primary-light: #6db3ff;
+  --primary-dark:  #3a7fd6;
+  --accent:        #1ecfe8;
+  --accent-light:  #45e0f5;
+  --success:       #3dd685;
+  --success-light: #5be89c;
+  --warning:       #fbb948;
+  --warning-light: #fcc96e;
+  --danger:        #f06b6e;
+  --danger-light:  #f58e90;
+}
+
+/* ── Reset & Base ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + env(safe-area-inset-top, 0px) + 16px);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font: 400 var(--fs-base)/1.65 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  transition: background var(--dur-slow) var(--ease-out),
+              color var(--dur-slow) var(--ease-out);
+}
+
+/* ── Custom Scrollbar ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+/* ── Skip Link ── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: var(--space-md);
+  background: var(--primary);
+  color: #fff;
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-md);
+  z-index: 999;
+  font-weight: 600;
+  text-decoration: none;
+  transition: top var(--dur-fast);
+}
+.skip-link:focus {
+  top: var(--space-md);
+}
+
+/* ── Typography ── */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  line-height: 1.15;
+  color: var(--text-primary);
+  margin-bottom: 0.5em;
+}
+
+h1 { font-size: var(--fs-3xl); font-weight: 800; }
+h2 { font-size: var(--fs-xl);  font-weight: 800; }
+h3 { font-size: var(--fs-lg);  font-weight: 700; }
+
+p {
+  color: var(--text-secondary);
+  max-width: 65ch;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--dur-fast);
+}
+
+a:hover {
+  color: var(--primary);
+}
+
+/* ── Focus Styles ── */
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Selection ── */
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* ── Layout ── */
+.wrapper {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--content-pad);
+}
+
+section {
+  padding: var(--space-3xl) 0;
+  position: relative;
+}
+
+.section-alt {
+  background: var(--accent-glow);
+}
+
+.section-header {
+  margin-bottom: var(--space-xl);
+}
+
+.section-subtitle {
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin-top: var(--space-xs);
+  font-size: var(--fs-md);
+}
+
+/* ── Grid Layouts ── */
+.grid-auto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-lg);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-lg);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-lg);
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+@media (max-width: 800px) {
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+
+/* ── Flex Utilities ── */
+.flex         { display: flex; }
+.flex-col     { flex-direction: column; }
+.flex-wrap    { flex-wrap: wrap; }
+.flex-center  { align-items: center; justify-content: center; }
+.flex-between { justify-content: space-between; }
+.gap-xs       { gap: var(--space-xs); }
+.gap-sm       { gap: var(--space-sm); }
+.gap-md       { gap: var(--space-md); }
+.gap-lg       { gap: var(--space-lg); }
+
+/* ── Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Page Transition Container ── */
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#page-content {
+  flex: 1;
+}
+
+/* Page enter/exit */
+.page-enter {
+  animation: pageIn var(--dur-slow) var(--ease-out) forwards;
+}
+
+.page-exit {
+  animation: pageOut var(--dur-fast) var(--ease-out) forwards;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pageOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+/* ── Visibility ── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden { display: none !important; }
+
+/* ── Print Media ── */
+@media print {
+  .nav, .footer, .sos-btn, .copilot-btn, #sos-dialog, #copilot-dialog, .theme-transition {
+    display: none !important;
+  }
+  body, main, #app {
+    background: #fff !important;
+    color: #000 !important;
+  }
+  .glass, .glass-static {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    background: #fff !important;
+  }
+}

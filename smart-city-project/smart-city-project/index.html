@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="CivicConnect - Smart City &amp; Civic Life Platform: Improving communication between citizens and city authorities for reporting civic issues, tracking complaints, discovering public services, and participating in smart-city activities.">
+  <meta name="theme-color" content="#1d6fe8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>CivicConnect - Smart City &amp; Civic Life Platform</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="./src/styles/index.css">
+  <link rel="stylesheet" href="./src/styles/components.css">
+  <link rel="stylesheet" href="./src/styles/animations.css">
+  <link rel="stylesheet" href="./src/styles/pages.css">
+  <link rel="stylesheet" href="./src/styles/civicconnect.css">
+  <link rel="stylesheet" href="./src/styles/civicfix.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231d6fe8'/><path d='M30 65 L45 35 L55 55 L70 30' stroke='white' stroke-width='8' fill='none' stroke-linecap='round'/><circle cx='70' cy='30' r='7' fill='%232fbf71'/></svg>" type="image/svg+xml">
+  <style>
+    /* ── Live Emergency Citizen Broadcast Banner ── */
+    .broadcast-banner {
+      background: linear-gradient(90deg, rgba(29, 111, 232, 0.16), rgba(47, 191, 113, 0.18), rgba(245, 165, 36, 0.16));
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      font-size: var(--fs-xs);
+      color: var(--text-primary);
+      position: relative;
+      z-index: 90;
+      transition: all var(--dur-normal) var(--ease-out);
+    }
+    .broadcast-banner__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-md);
+      padding: 7px var(--space-md);
+    }
+    .broadcast-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--danger);
+      color: #fff;
+      font-weight: 800;
+      font-size: 10px;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: var(--radius-full);
+      white-space: nowrap;
+      animation: pulse-ring 2s infinite ease-out;
+    }
+    .broadcast-text {
+      flex: 1;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .broadcast-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .broadcast-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 10px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all var(--dur-fast);
+      text-decoration: none;
+    }
+    .broadcast-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .broadcast-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 1px 6px;
+      line-height: 1;
+      border-radius: var(--radius-sm);
+    }
+    .broadcast-close:hover {
+      color: var(--danger);
+    }
+
+    /* ── Holographic 3D Digital Citizen Pass ── */
+    .civic-card-container {
+      perspective: 1000px;
+      width: 380px;
+      max-width: 100%;
+      margin: var(--space-md) auto;
+    }
+    .civic-card-inner {
+      position: relative;
+      width: 100%;
+      height: 236px;
+      transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+    .civic-card-inner.flipped {
+      transform: rotateY(180deg);
+    }
+    .civic-card-front, .civic-card-back {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: var(--radius-xl);
+      padding: var(--space-md) var(--space-lg);
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+    .civic-card-front {
+      background: linear-gradient(135deg, #0c1a30 0%, #15325b 45%, #0b223d 100%);
+    }
+    .civic-card-front::before {
+      content: '';
+      position: absolute;
+      inset: -60%;
+      background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.15) 50%, rgba(29,111,232,0.25) 60%, transparent 70%);
+      transform: rotate(25deg);
+      pointer-events: none;
+      animation: holo-sheen 6s infinite linear;
+    }
+    @keyframes holo-sheen {
+      0% { transform: translateY(-70%) rotate(25deg); }
+      100% { transform: translateY(70%) rotate(25deg); }
+    }
+    .civic-card-back {
+      background: linear-gradient(135deg, #071529 0%, #0d213a 100%);
+      transform: rotateY(180deg);
+    }
+    .chip-smart-emblem {
+      width: 36px;
+      height: 26px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #ffd700, #b8860b);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 2px;
+      padding: 3px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+    .chip-smart-emblem div { border: 1px solid rgba(0,0,0,0.25); border-radius: 2px; }
+
+    .nav__logo-badge {
+      font-size: 10px;
+      font-weight: 800;
+      color: #fff;
+      background: var(--success);
+      padding: 2px 6px;
+      border-radius: var(--radius-full);
+      margin-left: 4px;
+      letter-spacing: 0.04em;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app" class="app-layout">
+  <!-- Skip Link -->
+  <a class="skip-link" href="#page-content">Skip to main content</a>
+
+  <!-- Left-Side Vertical Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar" aria-label="Smart City Navigation">
+    <!-- Brand / Logo -->
+    <div class="sidebar-header">
+      <a class="sidebar-brand" href="#/home" aria-label="Smart City Home">
+        <span class="sidebar-brand__icon">🏙️</span>
+        <div class="sidebar-brand__text">
+          <span class="sidebar-brand__name">Smart City</span>
+          <span class="sidebar-brand__tag">CivicConnect</span>
+        </div>
+      </a>
+      <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close Navigation Drawer">✕</button>
+    </div>
+
+    <!-- Vertically Stacked Navigation Items -->
+    <div class="sidebar-nav-container">
+      <nav class="sidebar-nav">
+        <div class="sidebar-nav-label">Navigation</div>
+        <!-- 1. Home -->
+        <a class="sidebar-link active" href="#/home" data-page="home">
+          <span class="sidebar-link__icon">🏠</span>
+          <span class="sidebar-link__text">Home</span>
+        </a>
+
+        <!-- 2. Smart Services -->
+        <a class="sidebar-link" href="#/services" data-page="services">
+          <span class="sidebar-link__icon">🏙️</span>
+          <span class="sidebar-link__text">Smart Services</span>
+        </a>
+
+        <!-- 3. Report Issue -->
+        <a class="sidebar-link" href="#/report" data-page="report">
+          <span class="sidebar-link__icon">📝</span>
+          <span class="sidebar-link__text">Report Issue</span>
+        </a>
+
+        <!-- 4. Community -->
+        <a class="sidebar-link" href="#/community" data-page="community">
+          <span class="sidebar-link__icon">👥</span>
+          <span class="sidebar-link__text">Community</span>
+        </a>
+
+        <!-- 5. Dashboard -->
+        <a class="sidebar-link" href="#/dashboard" data-page="dashboard">
+          <span class="sidebar-link__icon">📊</span>
+          <span class="sidebar-link__text">Dashboard</span>
+        </a>
+
+        <!-- 6. Map -->
+        <a class="sidebar-link" href="#/map" data-page="map">
+          <span class="sidebar-link__icon">🗺️</span>
+          <span class="sidebar-link__text">Map</span>
+        </a>
+
+        <!-- 7. CivicAI -->
+        <a class="sidebar-link" href="#/ai" data-page="ai" id="sidebar-lnk-ai">
+          <span class="sidebar-link__icon">🤖</span>
+          <span class="sidebar-link__text">CivicAI</span>
+          <span class="sidebar-badge-new">AI</span>
+        </a>
+
+        <!-- 8. About -->
+        <a class="sidebar-link" href="#/about" data-page="about">
+          <span class="sidebar-link__icon">ℹ️</span>
+          <span class="sidebar-link__text">About</span>
+        </a>
+
+        <!-- City Life & Quick Operations -->
+        <div class="sidebar-nav-label" style="margin-top:10px">City Operations</div>
+        <a class="sidebar-link" href="#/track" data-page="track">
+          <span class="sidebar-link__icon">🔍</span>
+          <span class="sidebar-link__text">Track Complaint</span>
+        </a>
+        <a class="sidebar-link" href="#/transit" data-page="transit">
+          <span class="sidebar-link__icon">🚌</span>
+          <span class="sidebar-link__text">Transit Radar</span>
+        </a>
+        <a class="sidebar-link" href="#/waste" data-page="waste">
+          <span class="sidebar-link__icon">♻️</span>
+          <span class="sidebar-link__text">Waste Pickup</span>
+        </a>
+        <a class="sidebar-link" href="#/emergency" data-page="emergency" style="color:var(--danger)">
+          <span class="sidebar-link__icon">🚨</span>
+          <span class="sidebar-link__text">Emergency</span>
+        </a>
+        <a class="sidebar-link" href="#/admin" data-page="admin" id="nav-lnk-admin" style="color:var(--warning);display:none">
+          <span class="sidebar-link__icon">🏛️</span>
+          <span class="sidebar-link__text">Admin Console</span>
+        </a>
+      </nav>
+    </div>
+
+    <!-- Sidebar Bottom Section -->
+    <div class="sidebar-bottom">
+      <!-- Theme toggle -->
+      <button class="sidebar-action-item" id="theme-toggle" aria-label="Toggle Theme" title="Toggle Light/Dark Theme">
+        <span class="sidebar-action-icon" id="theme-toggle-icon">🌙</span>
+        <span class="sidebar-action-label" id="theme-toggle-label">Dark Theme</span>
+      </button>
+
+      <!-- Language selector -->
+      <div class="sidebar-lang-box">
+        <span class="sidebar-action-icon">🌐</span>
+        <select class="sidebar-lang-select" id="sidebar-lang-select" aria-label="Select Language">
+          <option value="en">English (EN)</option>
+          <option value="ta">தமிழ் (Tamil)</option>
+          <option value="hi">हिन्दी (Hindi)</option>
+          <option value="es">Español (ES)</option>
+        </select>
+      </div>
+
+      <!-- Login / Profile Button slot -->
+      <div class="sidebar-user-section" id="sidebar-user-block">
+        <!-- Injected dynamically by updateNavbarUser() -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- Mobile Drawer Backdrop Overlay -->
+  <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+  <!-- MAIN WRAPPER (Starts AFTER the sidebar) -->
+  <div class="main-wrapper" id="main-wrapper">
+    <!-- Top Header (Contextual breadcrumb, search, notifications, user) -->
+    <header class="top-header" id="top-header">
+      <div class="top-header__inner">
+        <!-- Left: Mobile Hamburger & Page Title / Breadcrumbs -->
+        <div class="top-header__left">
+          <button class="top-header__burger" id="burger" aria-label="Toggle navigation menu" aria-expanded="false">
+            ☰
+          </button>
+          <div class="top-header__breadcrumbs">
+            <span class="breadcrumb-root">Smart City</span>
+            <span class="breadcrumb-separator">/</span>
+            <h1 class="breadcrumb-current" id="header-page-title">Home</h1>
+          </div>
+        </div>
+
+        <!-- Right: Search, Notifications, Sound, Profile -->
+        <div class="top-header__right">
+          <!-- Global Search Button -->
+          <button class="top-header__search-btn" id="btn-global-search" aria-label="Global Search" title="Search CivicConnect (Ctrl+K)">
+            <span class="search-icon">🔍</span>
+            <span class="search-placeholder">Search city services, tickets...</span>
+            <kbd class="search-kbd">Ctrl+K</kbd>
+          </button>
+
+          <!-- Notifications Bell with Dropdown -->
+          <div class="notif-menu-wrap">
+            <button class="btn-icon btn-ghost" id="notif-bell-btn" aria-label="Notifications" title="Civic Alerts & Complaint Notifications">
+              🔔
+              <span class="notif-badge-pill" id="notif-badge" style="display:none">0</span>
+            </button>
+            <div class="notif-dropdown" id="notif-dropdown">
+              <div class="notif-header">
+                <span style="font-weight:700;font-size:var(--fs-sm)">Citizen Notifications</span>
+                <button class="chip" id="btn-clear-notifs" style="font-size:10px">Clear All</button>
+              </div>
+              <div class="notif-list" id="notif-dropdown-list"></div>
+            </div>
+          </div>
+
+          <!-- Sound Effects Toggle -->
+          <button class="btn-icon btn-ghost" id="sound-toggle" aria-label="Toggle UI Sound" title="Sound Effects Enabled">
+            🔊
+          </button>
+
+          <!-- Quick Profile Avatar Link -->
+          <a class="top-header__profile-chip" href="#/profile" id="nav-profile-btn" title="Citizen Profile">
+            <span>👤</span>
+            <span class="profile-name">Priya</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Live Emergency Citizen Broadcast & Weather Alert Banner -->
+    <aside class="broadcast-banner" id="broadcast-banner" role="alert">
+      <div class="wrapper broadcast-banner__inner">
+        <div class="broadcast-badge">⚠️ LIVE CIVIC ADVISORY</div>
+        <div class="broadcast-text" id="broadcast-text">
+          <span>🌧️ Monsoon High Alert: Zone 2 Sluice Gates 100% Operational · ⚡ Tech Park 90kW Solar Microgrid Synced · 🚌 Route 14 Smart Bus Fleet Added 6 EV Low-Floor Units · 🚯 Clean City ward drive Saturday</span>
+        </div>
+        <div class="broadcast-actions">
+          <a href="#/updates" class="broadcast-btn" title="View All City Alerts">All Alerts (5)</a>
+          <button class="broadcast-close" id="btn-close-broadcast" onclick="$('#broadcast-banner').style.display='none'" aria-label="Close Alert Banner">✕</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Page Content Dynamic Mount Container -->
+    <main id="page-content" role="main" aria-label="CivicConnect Content"></main>
+
+    <!-- Global Footer -->
+    <footer class="footer">
+      <div class="wrapper">
+        <div class="footer__grid">
+          <!-- Brand & Mission -->
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <span style="font-size:1.6rem">🏙️</span>
+              <h4 style="margin:0;font-size:1.2rem;font-weight:800">Smart City</h4>
+            </div>
+            <p id="footer-tagline" style="font-size:var(--fs-sm);color:var(--text-muted);line-height:1.5">
+              CivicConnect – Connecting Citizens with Smarter Cities.
+            </p>
+            <div class="footer__social" style="margin-top:12px">
+              <span title="X / Twitter">🐦</span>
+              <span title="Facebook Municipal Portal">📘</span>
+              <span title="Instagram Smart City Updates">📸</span>
+              <span title="YouTube City Council Telecasts">▶️</span>
+            </div>
+          </div>
+
+          <!-- About -->
+          <div>
+            <h4>About Platform</h4>
+            <a href="#/about">Our Mission</a>
+            <a href="#/about">AI & IoT Integration</a>
+            <a href="#/about">Ward Transparency</a>
+            <a href="#/community">Participatory Budgeting</a>
+            <a href="#/admin">Municipal Administration</a>
+          </div>
+
+          <!-- Services -->
+          <div>
+            <h4>City Services</h4>
+            <a href="#/services?cat=hospitals">Emergency Hospitals</a>
+            <a href="#/waste">Solid Waste Pickup</a>
+            <a href="#/transit">Public Bus & Metro Radar</a>
+            <a href="#/services?cat=parking">Smart Fastag Parking</a>
+            <a href="#/map">Interactive Sensor Map</a>
+          </div>
+
+          <!-- Help, Privacy & Emergency Contacts -->
+          <div>
+            <h4>Help & Emergency Contacts</h4>
+            <a href="tel:100" style="color:var(--primary);font-weight:700">🛡️ Police: 100</a>
+            <a href="tel:108" style="color:var(--danger);font-weight:700">🚑 Ambulance: 108</a>
+            <a href="tel:101" style="color:var(--warning);font-weight:700">🔥 Fire & Rescue: 101</a>
+            <a href="tel:1070" style="color:var(--accent);font-weight:700">🌊 Disaster Control: 1070</a>
+            <a href="tel:18004250000" style="font-size:var(--fs-xs);color:var(--text-muted);margin-top:4px;display:block">Toll-Free Helpline: 1800-425-0000</a>
+          </div>
+        </div>
+
+        <div class="footer__bottom" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+          <div>
+            © 2026 Smart City · CivicConnect Platform. All rights reserved.
+          </div>
+          <div>
+            <a href="#/about" style="color:var(--text-muted);margin-right:12px">Privacy Policy</a>
+            <a href="#/about" style="color:var(--text-muted)">Terms of Civic Service</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- Floating SOS Emergency Button & Dialog -->
+<button class="sos-btn sos-pulse" id="sos-btn" aria-label="Emergency SOS Quick Action">SOS</button>
+<dialog id="sos-dialog" aria-labelledby="sos-title">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <h3 id="sos-title" style="margin:0;color:var(--danger)">🚨 Emergency Assistance</h3>
+    <button class="chip" id="sos-close">✕</button>
+  </div>
+  <p style="color:var(--text-muted);margin-top:0;font-size:var(--fs-sm)">
+    Tap a service below to dial immediately. Share your location so dispatchers can send first responders.
+  </p>
+  <a class="btn btn-lg" href="tel:100" style="display:block;text-align:center;margin:8px 0;color:#fff;background:var(--primary)">🛡️ Police · 100</a>
+  <a class="btn btn-lg" href="tel:108" style="display:block;text-align:center;margin:8px 0;color:#fff;background:var(--danger)">🚑 Ambulance · 108</a>
+  <a class="btn btn-lg" href="tel:101" style="display:block;text-align:center;margin:8px 0;color:#fff;background:var(--warning)">🔥 Fire & Rescue · 101</a>
+  <a class="btn btn-lg" href="tel:1070" style="display:block;text-align:center;margin:8px 0;color:#fff;background:var(--accent)">🌊 Disaster Mgmt · 1070</a>
+  <button class="btn btn-lg btn-outline" id="sos-share-location" style="width:100%;margin:8px 0">📍 Share My Precise Location</button>
+  <p id="sos-location-result" role="status" style="font-size:var(--fs-xs);color:var(--primary);min-height:1.2em;text-align:center"></p>
+</dialog>
+
+<!-- CivicFix AI Assistant Floating Bilingual Chatbot -->
+<button class="civicfix-fab pulse-glow" id="civicfix-fab" aria-label="Open CivicFix AI Assistant">
+  <span class="civicfix-fab__icon">🤖</span>
+  <span>CivicFix AI</span>
+  <span class="civicfix-fab__badge">EN | தமிழ்</span>
+</button>
+
+<dialog class="civicfix-dialog" id="civicfix-dialog" aria-labelledby="civicfix-title">
+  <!-- Header with Brand, Tagline, Bilingual Toggle & Actions -->
+  <div class="civicfix-header">
+    <div class="civicfix-header__brand">
+      <div class="civicfix-avatar">
+        🤖
+        <span class="civicfix-avatar__status"></span>
+      </div>
+      <div class="civicfix-header__titles">
+        <h3 class="civicfix-header__title" id="civicfix-title">CivicFix AI Assistant</h3>
+        <p class="civicfix-header__tagline" id="civicfix-tagline">“Report it. Fix it. Prove it.”</p>
+      </div>
+    </div>
+
+    <!-- Bilingual Switcher: ONLY English & Tamil -->
+    <div class="civicfix-lang-switcher" role="group" aria-label="Language selection">
+      <button type="button" class="civicfix-lang-btn active" id="civicfix-lang-en">English</button>
+      <button type="button" class="civicfix-lang-btn" id="civicfix-lang-ta">தமிழ்</button>
+    </div>
+
+    <div class="civicfix-header__actions">
+      <button type="button" class="civicfix-icon-btn" id="civicfix-expand" title="Expand / Shrink" aria-label="Expand">⛶</button>
+      <button type="button" class="civicfix-icon-btn" id="civicfix-close" title="Close" aria-label="Close">✕</button>
+    </div>
+  </div>
+
+  <!-- Live Status Subheader -->
+  <div class="civicfix-banner">
+    <div>
+      <span class="civicfix-banner__dot"></span>
+      <span id="civicfix-banner-text">AI Grievance Engine Online · Bilingual 24/7</span>
+    </div>
+    <span style="font-weight:600;font-size:0.68rem;opacity:0.8">Smart City v2.4</span>
+  </div>
+
+  <!-- Chat Message Stream -->
+  <div class="civicfix-body" id="civicfix-chat" role="log" aria-live="polite"></div>
+
+  <!-- Quick Action Chips -->
+  <div class="civicfix-chips" id="civicfix-chips"></div>
+
+  <!-- Footer Input Area -->
+  <div class="civicfix-footer">
+    <div class="civicfix-input-row">
+      <input class="civicfix-input" id="civicfix-input" placeholder="Type in English, Tamil, or Tanglish..." aria-label="Civic problem or question" autocomplete="off">
+      <button class="civicfix-send-btn" id="civicfix-send">Send ✈️</button>
+    </div>
+    <div class="civicfix-tagline-footer">
+      CivicFix AI · “Report it. Fix it. Prove it.”
+    </div>
+  </div>
+</dialog>
+
+<!-- Global Search Modal (Ctrl+K or Header 🔍) -->
+<div class="search-modal-backdrop" id="global-search-modal">
+  <div class="search-modal-box">
+    <div class="search-input-header">
+      <span style="font-size:1.2rem">🔍</span>
+      <input id="global-search-input" placeholder="Search civic services, complaints, transit, or city updates..." autocomplete="off">
+      <button class="chip" id="btn-close-search">ESC</button>
+    </div>
+    <div class="search-results-area" id="global-search-results"></div>
+  </div>
+</div>
+
+<!-- Theme transition overlay -->
+<div class="theme-transition"></div>
+
+<!-- Core Application Engine -->
+<script src="./src/civic-platform.js"></script>
+
+<!-- Embedded Copilot & SOS Handlers -->
+<script>
+  // SOS Dialog Handlers
+  const sosBtn = document.getElementById('sos-btn');
+  const sosDialog = document.getElementById('sos-dialog');
+  const sosClose = document.getElementById('sos-close');
+  const sosShareLoc = document.getElementById('sos-share-location');
+  const sosLocRes = document.getElementById('sos-location-result');
+
+  if (sosBtn && sosDialog) {
+    sosBtn.onclick = () => { Sound.play('click'); sosDialog.showModal(); };
+    sosClose.onclick = () => sosDialog.close();
+    sosShareLoc.onclick = () => {
+      sosLocRes.textContent = 'Acquiring GPS fix…';
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          p => {
+            sosLocRes.textContent = `📍 Location broadcasted: ${p.coords.latitude.toFixed(4)}, ${p.coords.longitude.toFixed(4)} (Dispatched to Control Room).`;
+            Sound.play('award');
+          },
+          () => {
+            sosLocRes.textContent = `📍 Location fallback: 13.0827, 80.2707 (Central Ward Control Room alerted).`;
+          }
+        );
+      } else {
+        sosLocRes.textContent = `📍 Location fallback: 13.0827, 80.2707.`;
+      }
+    };
+  }
+
+</script>
+
+<!-- CivicFix AI Assistant Engine -->
+<script src="./src/components/civicfix-assistant.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "civicconnect-smart-city",
+  "version": "1.0.0",
+  "description": "CivicConnect - Smart City & Civic Life Platform",
+  "main": "index.html",
+  "scripts": {
+    "build": "powershell -NoProfile -ExecutionPolicy Bypass -File ./build.ps1",
+    "start": "powershell -NoProfile -ExecutionPolicy Bypass -File ./server.ps1",
+    "dev": "powershell -NoProfile -ExecutionPolicy Bypass -File ./server.ps1"
+  },
+  "keywords": [
+    "smart-city",
+    "civic-life",
+    "civicconnect"
+  ],
+  "author": "",
+  "license": "MIT"
+}
